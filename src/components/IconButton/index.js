@@ -13,7 +13,7 @@ const IconButton = ({ className, icon, label }) => {
   return (
     <IconButtonContainer className={className}>
       <Icon />
-      <span>{label}</span>
+      {label && <span>{label}</span>}
     </IconButtonContainer>
   );
 };

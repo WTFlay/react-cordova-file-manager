@@ -13,11 +13,13 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && mv build/ www/",
+    "build": "rm -rf www/ && react-scripts build && mv build/ www/",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "serve": "serve -s www",
-    "build-and-serve": "npm run build && npm run serve"
+    "build-and-serve": "npm run build && npm run serve",
+    "cordova:build": "cordova build",
+    "cordova:run": "npm run build && cordova run android"
   },
   "eslintConfig": {
     "extends": "react-app"
