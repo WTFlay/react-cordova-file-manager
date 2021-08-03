@@ -51,7 +51,8 @@
     "plugins": {
       "cordova-plugin-file": {},
       "cordova-plugin-filechooser": {},
-      "cordova-plugin-filename": {}
+      "cordova-plugin-filename": {},
+      "cordova-plugin-file-opener2": {}
     }
   }
 }

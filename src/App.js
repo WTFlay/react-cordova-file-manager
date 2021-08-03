@@ -72,13 +72,23 @@ const App = () => {
     }).catch(console.log);
   };
 
+  const download = (file) => {
+    cordovaLauncher().then(cordova => {
+      cordova.plugins.fileOpener2.open(
+        file.nativeURL,
+        'application/pdf',
+        { success: console.log, error: console.error }
+      );
+    }).catch(console.log);
+  };
+
   return (
     <AppContainer>
       <UploadButton icon={FaPlus} label="Upload new file" onClick={uploadFile} />
       <AppFileList
         files={files}
         renderKey={file => file.nativeURL}
-        onDownloadClick={console.log}
+        onDownloadClick={download}
         onDeleteClick={console.log}
       />
     </AppContainer>
