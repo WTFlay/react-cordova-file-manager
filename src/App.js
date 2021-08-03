@@ -36,33 +36,33 @@ const AppFileList = styled(FileList)`
   overflow-y: scroll;
 `;
 
-const fakeFiles = [
-  { id: 1, name: 'React Course - 1.pdf' },
-  { id: 2, name: 'Fichier avec un tres tres tres tres tres tres tres tres grand nom.pdf' },
-  { id: 3, name: 'Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum.pdf' },
-  { id: 4, name: 'Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum.pdf' },
-  { id: 5, name: 'Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum.pdf' },
-  { id: 6, name: 'Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum.pdf' },
-  { id: 7, name: 'Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum.pdf' },
-  { id: 8, name: 'Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum.pdf' },
-  { id: 9, name: 'Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum.pdf' },
-  { id: 10, name: 'Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum.pdf' },
-  { id: 11, name: 'Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum.pdf' },
-  { id: 12, name: 'Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum.pdf' },
-  { id: 13, name: 'Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum.pdf' }
-];
+function logError(title) {
+  return (error) => console.error(title, error);
+}
 
 const App = () => {
   const uploadFile = () => {
     cordovaLauncher().then(cordova => {
-      console.log('Cordova is ready to use')
+      // eslint-disable-next-line no-undef
+      fileChooser.open({ "mime": "application/pdf" }, url => {
+        window.resolveLocalFileSystemURL(url, uploadFileEntry => {
+          // eslint-disable-next-line no-undef
+          window.resolveLocalFileSystemURL(cordova.file.dataDirectory, dirEntry => {
+            dirEntry.getDirectory('PDF', { create: true } , pdfDirEntry => {
+              cordova.plugins.filename.getFilename(uploadFileEntry.nativeURL, fileName => {
+                uploadFileEntry.copyTo(pdfDirEntry, fileName, console.log, logError("copyTo"));
+              }, logError("getFilename"));
+            })
+          }, logError("resolve dataDirectory"))
+        }, logError("resolve url"));
+      }, logError("open pdf"));
     }).catch(console.log);
   };
 
   return (
     <AppContainer>
       <UploadButton icon={FaPlus} label="Upload new file" onClick={uploadFile} />
-      <AppFileList files={fakeFiles} onDownloadClick={console.log} onDeleteClick={console.log} />
+      <AppFileList files={[]} onDownloadClick={console.log} onDeleteClick={console.log} />
     </AppContainer>
   );
 };
