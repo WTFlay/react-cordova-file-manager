@@ -63,7 +63,9 @@ const App = () => {
           window.resolveLocalFileSystemURL(cordova.file.dataDirectory, dirEntry => {
             dirEntry.getDirectory('PDF', { create: true } , pdfDirEntry => {
               cordova.plugins.filename.getFilename(uploadFileEntry.nativeURL, fileName => {
-                uploadFileEntry.copyTo(pdfDirEntry, fileName, console.log, logError("copyTo"));
+                uploadFileEntry.copyTo(pdfDirEntry, fileName, newFileEntry => {
+                  setFiles(files => [...files, newFileEntry]);
+                }, logError("copyTo"));
               }, logError("getFilename"));
             })
           }, logError("resolve dataDirectory"))
@@ -72,7 +74,7 @@ const App = () => {
     }).catch(console.log);
   };
 
-  const download = (file) => {
+  const downloadFile = (file) => {
     cordovaLauncher().then(cordova => {
       cordova.plugins.fileOpener2.open(
         file.nativeURL,
@@ -82,14 +84,20 @@ const App = () => {
     }).catch(console.log);
   };
 
+  const deleteFile = (file) => {
+    file.remove(() => {
+      setFiles(files => files.filter(it => it !== file));
+    }, console.error);
+  };
+
   return (
     <AppContainer>
       <UploadButton icon={FaPlus} label="Upload new file" onClick={uploadFile} />
       <AppFileList
         files={files}
         renderKey={file => file.nativeURL}
-        onDownloadClick={download}
-        onDeleteClick={console.log}
+        onDownloadClick={downloadFile}
+        onDeleteClick={deleteFile}
       />
     </AppContainer>
   );
