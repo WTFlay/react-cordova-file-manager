@@ -8,10 +8,10 @@ const IconButtonContainer = styled(Button)`
   }
 `
 
-const IconButton = ({ className, icon, label }) => {
+const IconButton = ({ className, icon, label, onClick }) => {
   const Icon = icon;
   return (
-    <IconButtonContainer className={className}>
+    <IconButtonContainer className={className} onClick={onClick}>
       <Icon />
       {label && <span>{label}</span>}
     </IconButtonContainer>

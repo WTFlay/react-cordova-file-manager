@@ -4,6 +4,16 @@ import IconButton from "./components/IconButton";
 import styled from "styled-components";
 import FileList from "./components/FileList";
 
+const cordovaLauncher = () => {
+  return new Promise((resolve, reject) => {
+    if (window.cordova) {
+      resolve(window.cordova);
+    } else {
+      reject('Cordova is not available.');
+    }
+  });
+};
+
 const AppContainer = styled.div`
   width: 100%;
   --margin: 4vh;
@@ -42,13 +52,19 @@ const fakeFiles = [
   { id: 13, name: 'Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum-Loremipsum.pdf' }
 ];
 
-function App() {
+const App = () => {
+  const uploadFile = () => {
+    cordovaLauncher().then(cordova => {
+      console.log('Cordova is ready to use')
+    }).catch(console.log);
+  };
+
   return (
     <AppContainer>
-      <UploadButton icon={FaPlus} label="Upload new file" />
+      <UploadButton icon={FaPlus} label="Upload new file" onClick={uploadFile} />
       <AppFileList files={fakeFiles} onDownloadClick={console.log} onDeleteClick={console.log} />
     </AppContainer>
   );
-}
+};
 
 export default App;
