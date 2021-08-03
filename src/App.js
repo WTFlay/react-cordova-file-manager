@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { FaPlus } from "react-icons/all";
 import IconButton from "./components/IconButton";
 import styled from "styled-components";
@@ -41,6 +41,19 @@ function logError(title) {
 }
 
 const App = () => {
+  const [files, setFiles] = useState([]);
+
+  useEffect(() => {
+    cordovaLauncher().then(cordova => {
+      window.resolveLocalFileSystemURL(cordova.file.dataDirectory, entry => {
+        entry.getDirectory('PDF', { create: true }, pdfEntryDir => {
+          const reader = pdfEntryDir.createReader();
+          reader.readEntries(setFiles, logError("readEntries"));
+        }, logError("access pdf entry"));
+      }, logError("resolve data directory"));
+    }).catch(console.log);
+  }, []);
+
   const uploadFile = () => {
     cordovaLauncher().then(cordova => {
       // eslint-disable-next-line no-undef
@@ -62,7 +75,12 @@ const App = () => {
   return (
     <AppContainer>
       <UploadButton icon={FaPlus} label="Upload new file" onClick={uploadFile} />
-      <AppFileList files={[]} onDownloadClick={console.log} onDeleteClick={console.log} />
+      <AppFileList
+        files={files}
+        renderKey={file => file.nativeURL}
+        onDownloadClick={console.log}
+        onDeleteClick={console.log}
+      />
     </AppContainer>
   );
 };

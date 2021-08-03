@@ -9,11 +9,11 @@ const FileListContainer = styled.div`
   width: 100%;
 `;
 
-const FileList = ({ className, files, onDownloadClick, onDeleteClick }) => {
+const FileList = ({ className, files, onDownloadClick, onDeleteClick, renderKey }) => {
 
   const renderFileItem = (file) => (
     <FileItem
-      key={file.id}
+      key={renderKey ? renderKey(file) : file.id}
       file={file}
       onDownloadClick={() => onDownloadClick(file)}
       onDeleteClick={() => onDeleteClick(file)}

@@ -46,8 +46,8 @@ const FileItem = ({ file, onDownloadClick, onDeleteClick }) => {
     <FileItemContainer>
       <FileItemName>{file.name}</FileItemName>
       <FileItemButtonContainer>
-        <FileItemButton icon={FaDownload} />
-        <FileItemButton icon={FaTrash} />
+        <FileItemButton onClick={onDownloadClick} icon={FaDownload} />
+        <FileItemButton onClick={onDeleteClick} icon={FaTrash} />
       </FileItemButtonContainer>
     </FileItemContainer>
   );
